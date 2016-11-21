@@ -1,8 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+ * Authors : Lucien Camuglia & Julien Fäh T.IS-E2
+ * Date : 2016-2017 1st semester (august - november)
+ * Version 1.0 LCJF Base version
+ * descrption : Library for USB communication with ventus W928 weather station.
+ * Use : UsbLibrary from Mr. Neuhaus 
+ */
 
 namespace Weabrary
 {
@@ -102,8 +104,7 @@ namespace Weabrary
         {
             get { return rainCount; }
             set { rainCount = value; }
-        }
-        
+        }        
         public uint _src
         {
             get { return __src; }
@@ -114,49 +115,41 @@ namespace Weabrary
             get { return _forecast; }
             set { _forecast = value; }
         }
-
         public sbyte StormChar
         {
             get { return _storm; }
             set { _storm = value; }
         }
-
         public sbyte RainCountChar
         {
             get { return _RainCount; }
             set { _RainCount = value; }
         }
-
         public sbyte WChillChar
         {
             get { return _wChill; }
             set { _wChill = value; }
         }
-
         public sbyte WGustChar
         {
             get { return _wGust; }
             set { _wGust = value; }
         }
-
         public sbyte WSpeedChar
         {
             get { return _wSpeed; }
             set { _wSpeed = value; }
         }
-
         public sbyte WDirChar
         {
             get { return _wDir; }
             set { _wDir = value; }
         }
-
         public sbyte UvChar
         {
             get { return _uv; }
             set { _uv = value; }
         }
-
         public sbyte PressChar
         {
             get { return _press; }
@@ -172,7 +165,6 @@ namespace Weabrary
             get { return _h; }
             set { _h = value; }
         }
-        #endregion
-        
+        #endregion        
     }
 }

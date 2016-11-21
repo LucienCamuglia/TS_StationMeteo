@@ -1,9 +1,14 @@
-﻿using System;
+﻿/*
+ * Authors : Lucien Camuglia & Julien Fäh T.IS-E2
+ * Date : 2016-2017 1st semester (august - november)
+ * Version 1.0 LCJF Base version
+ * descrption : Library for USB communication with ventus W928 weather station.
+ * Use : UsbLibrary from Mr. Neuhaus 
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using UsbLibraryCfptAdd;
 using System.Globalization;
 
@@ -47,8 +52,6 @@ namespace Weabrary
             weabrary_DeviceRemoved += OnDeviceRemoved;
         }
 
-
-
         #region public methods
         public bool Connection()
         {
@@ -74,6 +77,8 @@ namespace Weabrary
             catch (Exception err)
             {
                 Connected = false;
+                if (debug > 0)
+                    Console.WriteLine("Connection error : " + err.ToString());
             }
 
             return Connected;
@@ -337,13 +342,10 @@ namespace Weabrary
         }
         #endregion
 
-
         #region private methods
 
-        private void OnDeviceArrived(object sender, EventArgs e)    {}
-        private void OnDeviceRemoved(object sender, EventArgs e)    {}
-
-
+        private void OnDeviceArrived(object sender, EventArgs e) {    }
+        private void OnDeviceRemoved(object sender, EventArgs e) {    }        
         private void usbPort_OnDeviceArrived(object sender, EventArgs args)
         {
             weabrary_DeviceArrived(this, EventArgs.Empty);
@@ -365,6 +367,7 @@ namespace Weabrary
         {
             // MessageBox.Show("Envoyé");
         }
+
         private void usbPort_OnDataRecieved(object sender, DataRecievedEventArgs args)
         {
 
@@ -382,13 +385,16 @@ namespace Weabrary
             strData = strData.Substring(2, strData.Length - 2); //supprime le 00 de début de buffer
             if (debug > 0)
                 Console.WriteLine(strData);
-            buffer += strData;
+            buffer += strData;//remplie le buffer avec la trame reçue
 
             char first = buffer[0];
             int bytes = charToInt(first);
             char[] test2 = strData.ToCharArray();
             char[] test = buffer.ToArray<char>();
 
+            //Test de traitement des données selon le projet "weewx"
+            //Certainement le traitement nécéssaire pour le bon fonctionnement de notre projet
+            //Malheureusement incompris
             if ((count + bytes) < 35)
             {
 
@@ -411,6 +417,7 @@ namespace Weabrary
 
         private void GetNewValues()
         {
+            //trame de requête des nouvelles valeurs de la station
             buffer = "";
             byte[] tbl = new byte[9] { 0xFF, 0x05, 0x0AF, 0x00, 0x00, 0x00, 0x00, 0xAF, 0xFE };
             tbl[5] = 0x0000FB / 0x10000;
@@ -420,6 +427,8 @@ namespace Weabrary
             SpecifiedDevice spfd = usbPort.SpecifiedDevice;
             spfd.SendData(tbl);
         }
+
+
         private int bcd2int(char bcd)
         {
             return ((int)((bcd & 0xF0) >> 4) * 10 + (int)(bcd & 0x0F));
@@ -700,7 +709,7 @@ namespace Weabrary
             if (debug > 0)
                 Console.WriteLine("end of CRC check \r\n");
 
-            return true;
+            return correct;
         }
         #endregion
 
